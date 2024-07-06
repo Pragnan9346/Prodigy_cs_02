@@ -1,0 +1,49 @@
+from PIL import Image
+
+def encrypt_image(input_path, output_path, key):
+    """
+    Encrypts an image using a simple pixel manipulation method.
+    
+    Parameters:
+        input_path (str): Path to the input image.
+        output_path (str): Path to save the encrypted image.
+        key (int): A key used for the encryption (simple integer addition).
+    """
+    # Open the input image
+    image = Image.open(input_path)
+    pixels = image.load()
+    
+    # Encrypt each pixel
+    for y in range(image.height):
+        for x in range(image.width):
+            r, g, b = pixels[x, y]
+            pixels[x, y] = ((r + key) % 256, (g + key) % 256, (b + key) % 256)
+    
+    # Save the encrypted image
+    image.save(output_path)
+
+def decrypt_image(input_path, output_path, key):
+    """
+    Decrypts an image using a simple pixel manipulation method.
+    
+    Parameters:
+        input_path (str): Path to the input encrypted image.
+        output_path (str): Path to save the decrypted image.
+        key (int): The key used for the encryption (simple integer subtraction).
+    """
+    # Open the input image
+    image = Image.open(input_path)
+    pixels = image.load()
+    
+    # Decrypt each pixel
+    for y in range(image.height):
+        for x in range(image.width):
+            r, g, b = pixels[x, y]
+            pixels[x, y] = ((r - key) % 256, (g - key) % 256, (b - key) % 256)
+    
+    # Save the decrypted image
+    image.save(output_path)
+
+# Example usage
+encrypt_image('input.jpg', 'encrypted.jpg', 42)
+decrypt_image('encrypted.jpg', 'decrypted.jpg', 42)
